@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<bottomSheet:BottomSheet xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:bottomSheet="http://pluginmauibottomsheet.com"
+             xmlns:bottomSheet1="clr-namespace:Sample.BottomSheet.CollectionView.ViewModels.BottomSheet"
+             xmlns:item="clr-namespace:Sample.BottomSheet.CollectionView.ViewModels.Item"
+             x:Class="Sample.BottomSheet.CollectionView.BottomSheet.SampleBottomSheet"
+             x:DataType="bottomSheet1:SampleBottomSheetViewModel"
+             HasHandle="True">
+    <bottomSheet:BottomSheet.Resources>
+        <DataTemplate x:Key="ItemDataTemplate"
+                      x:DataType="item:ItemViewModel">
+            <HorizontalStackLayout>
+                <CheckBox IsChecked="{Binding IsSelected}" />
+                <Label Text="{Binding Title}" />
+            </HorizontalStackLayout>
+        </DataTemplate>
+
+        <DataTemplate x:Key="GroupHeaderDataTemplate"
+                      x:DataType="item:ItemGroupViewModel">
+            <Label Text="{Binding GroupName}" />
+        </DataTemplate>
+    </bottomSheet:BottomSheet.Resources>
+    <bottomSheet:BottomSheetContent>
+        <Grid>
+            <CollectionView ItemsSource="{Binding Groups}" 
+                            ItemTemplate="{StaticResource ItemDataTemplate}"
+                            GroupHeaderTemplate="{StaticResource GroupHeaderDataTemplate}"
+                            SelectionMode="Single"
+                            SelectedItem="{Binding SelectedItem}"/>
+        </Grid>
+    </bottomSheet:BottomSheetContent>
+</bottomSheet:BottomSheet>
