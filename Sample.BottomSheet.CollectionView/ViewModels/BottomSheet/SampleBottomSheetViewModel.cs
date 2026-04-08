@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 
 using Plugin.Maui.BottomSheet.Navigation;
 
@@ -8,7 +9,7 @@ using Sample.BottomSheet.CollectionView.ViewModels.Item;
 
 namespace Sample.BottomSheet.CollectionView.ViewModels.BottomSheet
 {
-    public partial class SampleBottomSheetViewModel : ObservableObject, INavigationAware
+    public partial class SampleBottomSheetViewModel(IBottomSheetNavigationService bottomSheetNavigationService) : ObservableObject, INavigationAware
     {
         [ObservableProperty]
         private ItemViewModel? _selectedItem;
@@ -31,13 +32,33 @@ namespace Sample.BottomSheet.CollectionView.ViewModels.BottomSheet
         {
             var group = new ItemGroupViewModel("Section 1")
             {
-                new ItemViewModel("Item 1", false),
-                new ItemViewModel("Item 2", false),
-                new ItemViewModel("Item 3", true)
+                new ItemViewModel(1, "Item 1", false),
+                new ItemViewModel(2, "Item 2", false),
+                new ItemViewModel(3, "Item 3", true)
             };
             Groups.Add(group);
 
             SelectedItem = group.FirstOrDefault(x => x.IsSelected);
+        }
+
+        private bool CanSelect(ItemViewModel? parameter) => parameter is not null;
+
+        [RelayCommand(CanExecute = nameof(CanSelect))]
+        private void Select(ItemViewModel? parameter)
+        {
+            foreach (var item in Groups.SelectMany(x => x))
+            {
+                item.IsSelected = parameter!.Id == item.Id;
+            }
+        }
+
+        [RelayCommand]
+        private async Task Close()
+        {
+            await bottomSheetNavigationService.GoBackAsync(new BottomSheetNavigationParameters
+            {
+                { "SelectedId", SelectedItem?.Id ?? -1 }
+            });
         }
     }
 }

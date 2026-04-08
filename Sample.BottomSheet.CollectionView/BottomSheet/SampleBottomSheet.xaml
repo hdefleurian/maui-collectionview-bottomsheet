@@ -7,27 +7,50 @@
              x:Class="Sample.BottomSheet.CollectionView.BottomSheet.SampleBottomSheet"
              x:DataType="bottomSheet1:SampleBottomSheetViewModel"
              HasHandle="True">
-    <bottomSheet:BottomSheet.Resources>
-        <DataTemplate x:Key="ItemDataTemplate"
-                      x:DataType="item:ItemViewModel">
-            <HorizontalStackLayout>
-                <CheckBox IsChecked="{Binding IsSelected}" />
-                <Label Text="{Binding Title}" />
-            </HorizontalStackLayout>
-        </DataTemplate>
+  <bottomSheet:BottomSheet.Resources>
+    <DataTemplate x:Key="ItemDataTemplate"
+                  x:DataType="item:ItemViewModel">
+      <HorizontalStackLayout Spacing="10" Padding="10,5">
+        <HorizontalStackLayout.Style>
+          <Style TargetType="HorizontalStackLayout">
+            <Setter Property="VisualStateManager.VisualStateGroups">
+              <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                  <VisualState x:Name="Normal" />
+                  <VisualState x:Name="Selected">
+                    <VisualState.Setters>
+                      <Setter Property="BackgroundColor"
+                              Value="Transparent" />
+                    </VisualState.Setters>
+                  </VisualState>
+                </VisualStateGroup>
+              </VisualStateGroupList>
+            </Setter>
+          </Style>
+        </HorizontalStackLayout.Style>
+        <CheckBox IsChecked="{Binding IsSelected, Mode=OneWay}" IsEnabled="False" />
+        <Label Text="{Binding Title}" VerticalTextAlignment="Center" />
+      </HorizontalStackLayout>
+    </DataTemplate>
 
-        <DataTemplate x:Key="GroupHeaderDataTemplate"
-                      x:DataType="item:ItemGroupViewModel">
-            <Label Text="{Binding GroupName}" />
-        </DataTemplate>
-    </bottomSheet:BottomSheet.Resources>
-    <bottomSheet:BottomSheetContent>
-        <Grid>
-            <CollectionView ItemsSource="{Binding Groups}" 
-                            ItemTemplate="{StaticResource ItemDataTemplate}"
-                            GroupHeaderTemplate="{StaticResource GroupHeaderDataTemplate}"
-                            SelectionMode="Single"
-                            SelectedItem="{Binding SelectedItem}"/>
-        </Grid>
-    </bottomSheet:BottomSheetContent>
+    <DataTemplate x:Key="GroupHeaderDataTemplate"
+                  x:DataType="item:ItemGroupViewModel">
+      <Label Text="{Binding GroupName}" Margin="10,5" />
+    </DataTemplate>
+  </bottomSheet:BottomSheet.Resources>
+  <bottomSheet:BottomSheetContent>
+    <Grid ColumnDefinitions="10,*,10"
+          RowDefinitions="*,Auto">
+      <CollectionView Grid.ColumnSpan="3"
+                      IsGrouped="True"
+                      ItemsSource="{Binding Groups}"
+                      ItemTemplate="{StaticResource ItemDataTemplate}"
+                      GroupHeaderTemplate="{StaticResource GroupHeaderDataTemplate}"
+                      SelectionMode="Single"
+                      SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+                      SelectionChangedCommand="{Binding SelectCommand}"
+                      SelectionChangedCommandParameter="{Binding SelectedItem}"/>
+      <Button Text="Close" Grid.Column="1" Grid.Row="1" Command="{Binding CloseCommand}" HorizontalOptions="Fill" />
+    </Grid>
+  </bottomSheet:BottomSheetContent>
 </bottomSheet:BottomSheet>

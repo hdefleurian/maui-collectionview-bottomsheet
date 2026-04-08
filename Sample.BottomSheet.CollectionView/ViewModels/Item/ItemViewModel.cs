@@ -2,8 +2,10 @@
 
 namespace Sample.BottomSheet.CollectionView.ViewModels.Item
 {
-    public partial class ItemViewModel(string title, bool isSelected) : ObservableObject
+    public partial class ItemViewModel(int id, string title, bool isSelected) : ObservableObject
     {
+        public int Id { get; } = id;
+
         [ObservableProperty]
         public partial string Title { get; set; } = title;
 
