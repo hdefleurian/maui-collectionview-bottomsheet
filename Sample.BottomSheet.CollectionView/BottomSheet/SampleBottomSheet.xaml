@@ -6,6 +6,9 @@
              xmlns:item="clr-namespace:Sample.BottomSheet.CollectionView.ViewModels.Item"
              x:Class="Sample.BottomSheet.CollectionView.BottomSheet.SampleBottomSheet"
              x:DataType="bottomSheet1:SampleBottomSheetViewModel"
+             BackgroundColor="White"
+             IsCancelable="True"
+             SizeMode="FitToContent"
              HasHandle="True">
   <bottomSheet:BottomSheet.Resources>
     <DataTemplate x:Key="ItemDataTemplate"
